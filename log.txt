@@ -1,2 +1,4 @@
+20ff621 Task 2.1: Extract getAmount method logic, create getPlay helper, remove unnecessary parameters
+9fb7e73 Task 2.1-2.4: Complete refactoring of StatementPrinter with extracted methods and improved separation of concerns
 ef98ac2 fixed checkstyle errors
 100dce7 Initial commit
