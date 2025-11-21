@@ -23,19 +23,30 @@ public class StatementPrinter {
      * @throws RuntimeException if one of the play types is not known
      */
     public String statement() {
+        int totalAmount = 0;
+        int volumeCredits = 0;
         final StringBuilder result = new StringBuilder("Statement for " + invoice.getCustomer()
                 + System.lineSeparator());
 
+        final NumberFormat format = NumberFormat.getCurrencyInstance(Locale.US);
+
         for (Performance p : invoice.getPerformances()) {
+            // add volume credits
+            volumeCredits += Math.max(p.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
+            // add extra credit for every five comedy attendees
+            if ("comedy".equals(getPlay(p).getType())) {
+                volumeCredits += p.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
+            }
+
             // print line for this order
             result.append(String.format("  %s: %s (%s seats)%n",
                     getPlay(p).getName(),
-                    usd(getAmount(p)), p.getAudience()));
+                    format.format(getAmount(p) / Constants.PERCENT_FACTOR), p.getAudience()));
+            totalAmount += getAmount(p);
         }
-        
         result.append(String.format("Amount owed is %s%n",
-                usd(getTotalAmount())));
-        result.append(String.format("You earned %s credits%n", getTotalVolumeCredits()));
+                format.format(totalAmount / Constants.PERCENT_FACTOR)));
+        result.append(String.format("You earned %s credits%n", volumeCredits));
         return result.toString();
     }
 
@@ -66,36 +77,6 @@ public class StatementPrinter {
 
     private Play getPlay(Performance performance) {
         return plays.get(performance.getPlayID());
-    }
-
-    private int getVolumeCredits(Performance performance) {
-        int result = 0;
-        result += Math.max(performance.getAudience() - Constants.BASE_VOLUME_CREDIT_THRESHOLD, 0);
-        // add extra credit for every five comedy attendees
-        if ("comedy".equals(getPlay(performance).getType())) {
-            result += performance.getAudience() / Constants.COMEDY_EXTRA_VOLUME_FACTOR;
-        }
-        return result;
-    }
-
-    private String usd(int amountInCents) {
-        return NumberFormat.getCurrencyInstance(Locale.US).format(amountInCents / Constants.PERCENT_FACTOR);
-    }
-
-    private int getTotalAmount() {
-        int result = 0;
-        for (Performance performance : invoice.getPerformances()) {
-            result += getAmount(performance);
-        }
-        return result;
-    }
-
-    private int getTotalVolumeCredits() {
-        int result = 0;
-        for (Performance performance : invoice.getPerformances()) {
-            result += getVolumeCredits(performance);
-        }
-        return result;
     }
 
     public Invoice getInvoice() {

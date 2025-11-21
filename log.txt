@@ -1,7 +1,2 @@
 ef98ac2 fixed checkstyle errors
 100dce7 Initial commit
-
-Task 2.1 Completed: Extracted getAmount method, created getPlay helper, removed unnecessary parameters, and inlined thisAmount variable
-Task 2.2 Completed: Extracted volume credits calculation into getVolumeCredits method with proper variable naming
-Task 2.3 Completed: Removed frmt variable and created usd helper method for currency formatting
-Task 2.4 Completed: Split loops and extracted getTotalAmount and getTotalVolumeCredits methods for better separation of concerns
