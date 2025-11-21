@@ -1,3 +1,5 @@
+d38b14a Task 2.4: Split loops and extracted getTotalAmount and getTotalVolumeCredits methods
+8b69a61 Task 2.3: Update log.txt
 ad39cce Task 2.3: Remove frmt variable and create usd helper method
 017c185 Task 2.2: Update log.txt
 ccaaaff Task 2.2: Extract volume credits calculation into getVolumeCredits method
